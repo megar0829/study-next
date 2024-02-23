@@ -1,12 +1,20 @@
 import { Suspense } from "react";
-import MovieInfo from "../../../../components/movie-info";
+import MovieInfo, { getMovie } from "../../../../components/movie-info";
 import MovieVideos from "../../../../components/movie-videos";
 
-export default async function MovieDetail({
-  params: {id},
-}: {
-  params: {id: string}
-}) {
+interface IParams {
+  params: {id: string};
+}
+
+export async function generateMetadata({params: {id}} : IParams) {
+  const movie = await getMovie(id);
+
+  return {
+    title: movie.title,
+  };
+}
+
+export default async function MovieDetailPage({params: {id}} : IParams) {
 
   // 병렬 fetch : 두개 이상의 비동기를 동기로 처리하는 방법 (Promise.all 사용)
   // 두 개의 함수가 동시에 시작하도록 처리는 했지만 두 함수가 모두 끝날때까지 기다려야 한다.
